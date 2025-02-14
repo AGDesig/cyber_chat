@@ -12,6 +12,7 @@ class FriendRequestScreen extends StatelessWidget {
   final ChatController _chatController = Get.find<ChatController>();
   final SignInController _signInController = Get.find<SignInController>();
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +25,8 @@ class FriendRequestScreen extends StatelessWidget {
           Text("List of friends"),
           Expanded(
             flex: 1,
-            child: FutureBuilder<List<UserModel>>(
-              future: _friendController.getFriends(),
+            child: StreamBuilder<List<UserModel>>(
+              stream: _friendController.getFriends(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -49,7 +50,8 @@ class FriendRequestScreen extends StatelessWidget {
                         icon: Icon(Icons.message),
                         onPressed: () async {
                           // Start chat when user is tapped
-                          String chatId = await _chatController.getChatId(currentUserUid, user.uid);
+                          String chatId = await _chatController.getChatId(
+                              currentUserUid, user.uid);
 
                           // Navigate to the chat screen
                           Get.toNamed(
@@ -72,8 +74,8 @@ class FriendRequestScreen extends StatelessWidget {
           // Section to show incoming friend requests
           Expanded(
             flex: 1,
-            child: FutureBuilder<List<UserModel>>(
-              future: _friendController.getFriendRequests(),
+            child: StreamBuilder<List<UserModel>>(
+              stream: _friendController.getFriendRequests(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -120,8 +122,8 @@ class FriendRequestScreen extends StatelessWidget {
           // Section to search and send friend requests
           Expanded(
             flex: 1,
-            child: FutureBuilder<List<UserModel>>(
-              future: _friendController.getAllUsers(),
+            child: StreamBuilder<List<UserModel>>(
+              stream: _friendController.getAllUsers(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -158,3 +160,4 @@ class FriendRequestScreen extends StatelessWidget {
     );
   }
 }
+

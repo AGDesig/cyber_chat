@@ -1,8 +1,16 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:html' as html; // Required for web interactions
+import 'dart:ui' as ui; // Required for registering custom elements
+import 'package:flutter/foundation.dart';
+import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_app/utils/app_routes.dart';
+
+import '../main.dart';
 
 class SignInController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -11,15 +19,27 @@ class SignInController extends GetxController {
   String get currentUserName => _currentUser?.displayName ?? '';
   String get currentUserImageUrl => _currentUser?.photoURL ?? '';
 
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignIn googleSignIn = GoogleSignIn(clientId: "106733356500-0cvv0jqng8vj6mm0ho64jpt0i4005cm5.apps.googleusercontent.com",scopes: ['email'],);
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var user = Rxn<User>();
-
+@override
+  void onInit() {
+  super.onInit();
+  }
 
   Future<void> googleLogin() async {
-    try {
+    // GoogleSignInPlugin().init(clientId: "106733356500-0cvv0jqng8vj6mm0ho64jpt0i4005cm5.apps.googleusercontent.com",scopes: ["email"]);
 
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    try {
+      final GoogleSignInAccount? googleUser;
+      if(kIsWeb){
+         googleUser = await googleSignIn.signIn();
+          // GoogleSignInPlugin().renderButton(configuration: GSIButtonConfiguration());
+
+      }else{
+        googleUser = await googleSignIn.signIn();
+
+      }
       if (googleUser == null) return;
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(

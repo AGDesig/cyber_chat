@@ -12,7 +12,7 @@ class FriendController extends GetxController {
   // Send a friend request
   Future<void> sendFriendRequest(String friendUid) async {
 
-    // Fetch the current user's data
+  // Fetch the current user's data
     final userSnapshot = await _firestore.collection('users').doc(
         currentUserUid).get();
     final userData = userSnapshot.data();
@@ -23,6 +23,17 @@ class FriendController extends GetxController {
       if (friends.contains(friendUid)) {
         Get.snackbar('Error', 'You are already friends with this user.');
         return; // Stop execution if already friends
+      } else{
+
+        // Update sender's friend request list
+        await _firestore.collection('users').doc(currentUserUid).update({
+          'friendRequestsSent': FieldValue.arrayUnion([friendUid]),
+        });
+
+        // Update the receiver's incoming friend request list
+        await _firestore.collection('users').doc(friendUid).update({
+          'friendRequests': FieldValue.arrayUnion([currentUserUid]),
+        });
       }
     }
   }
@@ -50,45 +61,59 @@ class FriendController extends GetxController {
       'friendRequests': FieldValue.arrayRemove([senderUid]),
     });
   }
-
-  // Fetch all users except the current user
-  Future<List<UserModel>> getAllUsers() async {
+  // Stream to fetch all users except the current user
+  Stream<List<UserModel>> getAllUsers() {
     String currentUserUid = _signInController.currentUserUid;
 
-    final querySnapshot = await _firestore.collection('users').get();
-    return querySnapshot.docs
-        .map((doc) => UserModel.fromDocument(doc.data() as Map<String, dynamic>))
-        .where((user) => user.uid != currentUserUid)
-        .toList();
+    return _firestore.collection('users').snapshots().map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => UserModel.fromDocument(doc.data() as Map<String, dynamic>))
+          .where((user) => user.uid != currentUserUid) // Exclude current user
+          .toList();
+    });
   }
 
-  // Fetch all friend requests received by the current user
-  Future<List<UserModel>> getFriendRequests() async {
+  // Stream to fetch all friend requests received by the current user
+  Stream<List<UserModel>> getFriendRequests() {
     String currentUserUid = _signInController.currentUserUid;
 
-    final userSnapshot = await _firestore.collection('users').doc(currentUserUid).get();
-    final userData = UserModel.fromDocument(userSnapshot.data() as Map<String, dynamic>);
+    // Listen to changes in the current user's document
+    return _firestore.collection('users').doc(currentUserUid).snapshots().asyncMap((userSnapshot) async {
+      final userData = userSnapshot.data();
+      if (userData == null || userData['friendRequests'] == null) return [];
 
-    List<UserModel> friendRequests = [];
-    for (String uid in userData.friendRequests) {
-      final requestSnapshot = await _firestore.collection('users').doc(uid).get();
-      friendRequests.add(UserModel.fromDocument(requestSnapshot.data() as Map<String, dynamic>));
-    }
-    return friendRequests;
+      List<String> requestUids = List<String>.from(userData['friendRequests']);
+      List<UserModel> friendRequests = [];
+
+      // Fetch each user who sent a friend request
+      for (String uid in requestUids) {
+        final requestSnapshot = await _firestore.collection('users').doc(uid).get();
+        friendRequests.add(UserModel.fromDocument(requestSnapshot.data() as Map<String, dynamic>));
+      }
+
+      return friendRequests;
+    });
   }
 
-  // Fetch all friends of the current user
-  Future<List<UserModel>> getFriends() async {
+  // Stream to fetch all friends of the current user
+  Stream<List<UserModel>> getFriends() {
     String currentUserUid = _signInController.currentUserUid;
 
-    final userSnapshot = await _firestore.collection('users').doc(currentUserUid).get();
-    final userData = UserModel.fromDocument(userSnapshot.data() as Map<String, dynamic>);
+    // Listen to changes in the current user's document
+    return _firestore.collection('users').doc(currentUserUid).snapshots().asyncMap((userSnapshot) async {
+      final userData = userSnapshot.data();
+      if (userData == null || userData['friends'] == null) return [];
 
-    List<UserModel> friends = [];
-    for (String uid in userData.friends) {
-      final friendSnapshot = await _firestore.collection('users').doc(uid).get();
-      friends.add(UserModel.fromDocument(friendSnapshot.data() as Map<String, dynamic>));
-    }
-    return friends;
+      List<String> friendUids = List<String>.from(userData['friends']);
+      List<UserModel> friends = [];
+
+      // Fetch each friend document
+      for (String uid in friendUids) {
+        final friendSnapshot = await _firestore.collection('users').doc(uid).get();
+        friends.add(UserModel.fromDocument(friendSnapshot.data() as Map<String, dynamic>));
+      }
+
+      return friends;
+    });
   }
 }

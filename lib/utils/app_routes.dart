@@ -8,6 +8,8 @@ import 'package:social_app/View/editing_profile_screen_view.dart';
 import 'package:social_app/View/friend_request_view.dart';
 import 'package:social_app/View/home_screen_view.dart';
 import 'package:social_app/View/notification_screen_view.dart';
+import 'package:social_app/View/on_boarding_screen/controller/page_view_controller.dart';
+import 'package:social_app/View/on_boarding_screen/welcome_view.dart';
 import 'package:social_app/View/post_screen_view.dart';
 import 'package:social_app/View/profile_view.dart';
 import 'package:social_app/View/signin_view.dart';
@@ -18,6 +20,7 @@ import 'app_routes.dart';
 
 class AppRoutes {
   static const String splash = '/';
+  static const String welcome = '/welcome';
   static const String login = '/login';
   static const String home = '/home';
   static const String friendRequests = '/friend-requests';
@@ -37,6 +40,13 @@ class AppPages {
       page: () => SplashScreenView(),
       binding:  BindingsBuilder(() {
         Get.put(SplashScreenView());
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.welcome,
+      page: () => WelcomeView(),
+      binding:  BindingsBuilder(() {
+        Get.put(PageViewController());
       }),
     ),
     GetPage(
