@@ -28,15 +28,15 @@ Widget appButton(
     onTap: onTap,
     child: haveSize ==true
         ? Container(
-            height: height ?? percentageHeight(value: 52),
-            width: width ?? percentageWidth(value: 152),
+            height:  percentageHeight(value: height!),
+            width:  percentageWidth(value: width!),
             decoration: BoxDecoration(
                 color: color ?? Colors.blue,
                 shape: shape,
                 border: border,
                 gradient: gradient,
                 boxShadow: boxShadow,
-                borderRadius: borderRadius??BorderRadius.all(Radius.circular(100))),
+                borderRadius: borderRadius),
             child: Align(
               alignment: alignment,
               child: Row( mainAxisSize: MainAxisSize.min,

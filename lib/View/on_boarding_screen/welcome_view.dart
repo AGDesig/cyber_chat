@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_app/View/on_boarding_screen/controller/page_view_controller.dart';
 import 'package:social_app/res/components/app_button.dart';
+import 'package:social_app/res/components/custom_base_scaffold.dart';
 import 'package:social_app/utils/app_routes.dart';
 import 'package:social_app/utils/app_strings.dart';
 
@@ -13,7 +14,7 @@ class WelcomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return baseScaffold(
       body: Obx(() {
         return SingleChildScrollView(
           child: Container(
