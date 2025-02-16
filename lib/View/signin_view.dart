@@ -195,8 +195,6 @@ class SignInPage extends StatelessWidget {
               ),
               color: Colors.white,
               shape: BoxShape.circle,
-        
-        
             )
           ],
         ),

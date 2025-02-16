@@ -15,8 +15,8 @@ Widget appButton(
       Widget icon = const SizedBox(),
     EdgeInsetsGeometry? padding,
     EdgeInsetsGeometry? margin,
-    double? height,
-    double? width,
+    double height = 52,
+    double width= 152,
      AlignmentGeometry alignment = Alignment. center,
       BorderRadiusGeometry? borderRadius,
       BoxShape shape = BoxShape. rectangle,
@@ -28,15 +28,15 @@ Widget appButton(
     onTap: onTap,
     child: haveSize ==true
         ? Container(
-            height:  percentageHeight(value: height!),
-            width:  percentageWidth(value: width!),
+            height:  percentageHeight(value: height),
+            width:  percentageWidth(value: width),
             decoration: BoxDecoration(
                 color: color ?? Colors.blue,
                 shape: shape,
                 border: border,
                 gradient: gradient,
                 boxShadow: boxShadow,
-                borderRadius: borderRadius),
+                borderRadius: shape != BoxShape.circle||borderRadius==null?borderRadius:BorderRadius.all(Radius.circular(100))),
             child: Align(
               alignment: alignment,
               child: Row( mainAxisSize: MainAxisSize.min,

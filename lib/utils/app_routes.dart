@@ -11,6 +11,7 @@ import 'package:social_app/View/notification_screen_view.dart';
 import 'package:social_app/View/on_boarding_screen/controller/page_view_controller.dart';
 import 'package:social_app/View/on_boarding_screen/welcome_view.dart';
 import 'package:social_app/View/post_screen_view.dart';
+import 'package:social_app/View/profile_setup_screen/profile_setup_view.dart';
 import 'package:social_app/View/profile_view.dart';
 import 'package:social_app/View/signin_view.dart';
 import 'package:social_app/View/splash_screen_view.dart';
@@ -26,6 +27,7 @@ class AppRoutes {
   static const String friendRequests = '/friend-requests';
   static const String chat = '/chat/:chatId';
   static const String profile = '/profile';
+  static const String profileSetup = '/profileSetup';
   static const String editProfile = '/editProfileScreen';
   static const String post = '/post';
   static const String notification = '/notification';
@@ -52,6 +54,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.login,
       page: () => SignInPage(),
+    ),
+    GetPage(
+      name: AppRoutes.profileSetup,
+      page: () => ProfileSetupView(),
     ),
     GetPage(
       name: AppRoutes.home,
