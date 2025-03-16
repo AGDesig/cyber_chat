@@ -26,7 +26,7 @@ class SplashScreenView extends StatelessWidget {
     return Center(
       child: Column(mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset("assets/images/cyber_logo.png",height: height,width:width, ),
+            Image.asset("assets/images/black_triadz_logo.png",height: height,width:width, ),
           ],
         ),
     );

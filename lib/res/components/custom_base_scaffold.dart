@@ -1,9 +1,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:social_app/utils/app_colors.dart';
 
 
-Widget baseScaffold({
+Scaffold baseScaffold({
   FloatingActionButtonLocation? floatingActionButtonLocation,
   Widget? floatingActionButton,
   Widget? bottomNavigationBar,
@@ -14,7 +15,7 @@ Widget baseScaffold({
 }) {
   return Scaffold(
     bottomSheet: bottomSheet,
-    backgroundColor: backgroundColor??Colors.grey.withOpacity(0.1),
+    backgroundColor: backgroundColor??AppColors.white.withValues(alpha: 0.95),
     appBar: appBar,
     bottomNavigationBar: bottomNavigationBar,
     floatingActionButton: floatingActionButton,

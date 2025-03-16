@@ -2,10 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:html' as html; // Required for web interactions
-import 'dart:ui' as ui; // Required for registering custom elements
 import 'package:flutter/foundation.dart';
-import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_app/View/profile_setup_screen/controller/profile_setup_controller.dart';
@@ -50,7 +47,7 @@ class SignInController extends GetxController {
       UserCredential userCredential = await _auth.signInWithCredential(credential);
 
       // Store user info in Firestore
-      if(userCredential.user !=null){
+      if(userCredential.user ==null){
         await setUserData(userCredential.user);
       }
       var user =await profileSetupController.getUserProfile(currentUserUid);
@@ -77,16 +74,18 @@ class SignInController extends GetxController {
         'email': user.email,
         'isProfileAlreadySet': "",
         'photoUrl': user.photoURL,
-      }, SetOptions(merge: true));
-      await userRef.set({
-        'uid': user.uid,
-        'userName': user.displayName,
-        'displayName': user.displayName,
-        "bio":"",
-        "interest":"",
-        "location":"",
-        'photoUrl': user.photoURL,
-      }, SetOptions(merge: true));
+      }, SetOptions(merge: true)).then((value)async {
+        await userRef.set({
+          'uid': user.uid,
+          'userName': user.displayName,
+          'displayName': user.displayName,
+          "bio":"",
+          "interest":"",
+          "location":"",
+          'photoUrl': user.photoURL,
+        }, SetOptions(merge: true));
+      },);
+
 
     }
   }

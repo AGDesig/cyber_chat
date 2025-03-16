@@ -59,13 +59,13 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: mainAxisAlignment,
         children: [
           Image.asset(
-            "assets/images/cyber_logo.png",
+            "assets/images/black_triadz_logo.png",
             height: logoImageHeight,
             width: logoImageWidth,
           ),
           if(hasSizedBox)
             SizedBox(height: heightPercent *3,),
-          appText("$welcomeTo $cyber $chat",
+          appText("$welcomeTo $blackTriads family",
               fontSize: fontSize??30, fontWeight: FontWeight.w600),
           if(hasSizedBox)
             SizedBox(height: heightPercent *3,),
@@ -139,13 +139,13 @@ class SignInPage extends StatelessWidget {
           mainAxisAlignment: mainAxisAlignment,
           children: [
             Image.asset(
-              "assets/images/cyber_logo.png",
+              "assets/images/black_triadz_logo.png",
               height: logoImageHeight,
               width: logoImageWidth,
             ),
             if(hasSizedBox)
               SizedBox(height: heightPercent *3,),
-            appText("$welcomeTo $cyber $chat",
+            appText("$welcomeTo $blackTriads family",
                 fontSize: fontSize??30, fontWeight: FontWeight.w600),
             if(hasSizedBox)
               SizedBox(height: heightPercent *3,),
